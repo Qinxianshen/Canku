@@ -1,7 +1,6 @@
 package com.qin.CanKu.enter;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,9 +9,13 @@ import android.widget.EditText;
 
 import com.qin.CanKu.MainActivity;
 import com.qin.CanKu.R;
-import com.qin.CanKu.utils.Constant;
+import com.qin.CanKu.bean.Woods;
 import com.qin.CanKu.utils.DbManger;
 import com.qin.CanKu.utils.MySqliteHelper;
+import com.qin.CanKu.utils.ToastUtil;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class EnterActivity extends AppCompatActivity {
     private EditText edt_name;
@@ -20,10 +23,12 @@ public class EnterActivity extends AppCompatActivity {
     private EditText edt_number;
     private EditText edt_location;
     private MySqliteHelper helper;
+    private ToastUtil toastUtil;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter);
+
 
         edt_name= (EditText) findViewById(R.id.edt_name);
         edt_modelnumber= (EditText) findViewById(R.id.edt_modelnumber );
@@ -43,10 +48,28 @@ public class EnterActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_save:
-                    SQLiteDatabase db=helper.getWritableDatabase();
+                    //上传Bmob
+                    Woods woods = new Woods();
+                    woods.setName(edt_name.getText().toString());
+                    woods.setWood_id(edt_modelnumber.getText().toString());
+                    woods.setWood_num(Integer.parseInt(edt_number.getText().toString()));
+                    woods.setWood_loaction(edt_location.getText().toString());
+                    woods.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String objectId, BmobException e) {
+                            if(e==null){
+                                toastUtil.show("添加数据成功，返回objectId为："+objectId);
+                            }else{
+                                toastUtil.show("创建数据失败：" + e.getMessage());
+                            }
+                        }
+                    });
+
+
+/*                    SQLiteDatabase db=helper.getWritableDatabase();
                     String sql="insert into "+Constant.TABLE_NAME+"("+Constant._ID+","+Constant.NAME+","+Constant.MODELNUMBER+","+Constant.NUMBER+","+ Constant.LOCATION+") values(null,'"+edt_name.getText()+"','"+edt_modelnumber.getText()+"','"+edt_number.getText()+"','"+edt_location.getText()+"')";
                     db.execSQL(sql);
-                    db.close();
+                    db.close();*/
                     Intent intent=new Intent(EnterActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
