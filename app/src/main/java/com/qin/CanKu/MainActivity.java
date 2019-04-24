@@ -9,13 +9,15 @@ import android.widget.Button;
 import com.qin.CanKu.enter.EnterActivity;
 import com.qin.CanKu.query.QueryActivity;
 
+import cn.bmob.v3.Bmob;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bmob.initialize(this, "9daa5b3df6f68486da0bff68461f64ac");
         setContentView(R.layout.activity_main);
-
 
 
         Button btn_enter = (Button) findViewById(R.id.btn_enter);
