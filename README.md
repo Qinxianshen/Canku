@@ -1,6 +1,6 @@
 # Canku
 
-仓库管理 android
+仓库管理 android 对接Bmob
 
 ## 本地仓库管理
 
@@ -12,3 +12,6 @@
 
 ## Bmob 云端管理
 
+![cmd-markdown-logo](./pic/4.png)
+
+![cmd-markdown-logo](./pic/5.png)
